@@ -21,6 +21,13 @@ struct RowData{
     struct matrix *c;
 };
 
+struct ElementData{
+    int i,j;
+    int *row;
+    struct matrix *b;
+    struct matrix *c;
+};
+
 void CreateMatrix(struct matrix *m, int row, int col) {
     m->row = row;
     m->col = col;
@@ -122,7 +129,36 @@ void RowMatrixMultiplication(struct data *Data) {
     }
 }
 
+void *ElementMultiplication(void *ThreadData){
+    struct ElementData *data = ThreadData;
+    data->c->data[data->i][data->j] =0;
+    for (int i = 0; i < data->b->row; ++i) {
+        data->c->data[data->i][data->j] += data->row[i]*data->b->data[i][data->j];
+    }
+    free(data);
+    pthread_exit(0);
+}
+
+void ElementMatrixMultiplication(struct data *Data){
+    int ThreadsNumber = Data->a->row*Data->b->col;
+    pthread_t Threads[ThreadsNumber];
+    for (int i = 0; i < Data->c->row; ++i) {
+        for (int j = 0; j < Data->c->col; ++j) {
+            struct ElementData *ThreadData = malloc(sizeof(struct ElementData));
+            ThreadData->row = Data->a->data[i];
+            ThreadData->c = Data->c;
+            ThreadData->b = Data->b;
+            ThreadData->i = i;
+            ThreadData->j = j;
+            pthread_create(&Threads[i*Data->b->col+j], NULL, ElementMultiplication, ThreadData);
+        }
+    }
+    for (int i = 0; i < ThreadsNumber; ++i) {
+        pthread_join(Threads[i], NULL);
+    }
+}
 int main() {
+    struct timeval stop, start;
     struct data *Data = malloc(sizeof(struct data));
     struct matrix a;
     struct matrix b;
@@ -142,15 +178,26 @@ int main() {
         printf("Sizes aren't suitable");
         return 0;
     }
-    for (int i = 0; i < 2; ++i) {
+    char *name;
+    for (int i = 0; i < 3; ++i) {
+        gettimeofday(&start, NULL);
         if(i==0){
             MatrixMultiplication(Data);
+            name = "c0";
         }else if(i==1){
             RowMatrixMultiplication(Data);
+            name = "c1";
+        }else{
+            ElementMatrixMultiplication(Data);
+            name = "c2";
         }
-        WriteFile(sprintf("", "c%d",i), Data->c);
+        gettimeofday(&stop, NULL);
+        printf("%d.Seconds taken %lu\n", i,stop.tv_sec - start.tv_sec);
+        printf("%d.Microseconds taken: %lu\n", i,stop.tv_usec - start.tv_usec);
+        WriteFile(name, Data->c);
     }
     free(Data->c->data);
     free(Data);
     return 0;
 }
+

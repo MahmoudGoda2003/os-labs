@@ -395,8 +395,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/mahmoud/CLionProjects/lab2/cmake-build-debug",
-		"source" : "/home/mahmoud/CLionProjects/lab2"
+		"build" : "/home/mahmoud/os-labs/lab2/cmake-build-debug",
+		"source" : "/home/mahmoud/os-labs/lab2"
 	},
 	"version" : 
 	{

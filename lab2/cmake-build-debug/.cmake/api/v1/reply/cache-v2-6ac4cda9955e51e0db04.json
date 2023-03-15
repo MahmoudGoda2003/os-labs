@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/mahmoud/CLionProjects/lab2/cmake-build-debug"
+			"value" : "/home/mahmoud/os-labs/lab2/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -415,7 +415,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/mahmoud/CLionProjects/lab2/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/mahmoud/os-labs/lab2/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -475,7 +475,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/mahmoud/CLionProjects/lab2"
+			"value" : "/home/mahmoud/os-labs/lab2"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1019,7 +1019,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/mahmoud/CLionProjects/lab2/cmake-build-debug"
+			"value" : "/home/mahmoud/os-labs/lab2/cmake-build-debug"
 		},
 		{
 			"name" : "lab2_IS_TOP_LEVEL",
@@ -1043,7 +1043,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/mahmoud/CLionProjects/lab2"
+			"value" : "/home/mahmoud/os-labs/lab2"
 		}
 	],
 	"kind" : "cache",
