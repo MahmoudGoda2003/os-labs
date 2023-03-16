@@ -60,6 +60,7 @@ int ReadFile(char *file, struct matrix *m) {
         for (int j = 0; j < col; ++j) {
             if (fscanf(File, "%d", &m->data[i][j]) != 1) {
                 printf("Failed to read file %s\n", name);
+                free(l);
                 free(m->data[0]);
                 free(m->data);
                 return 1;
@@ -157,15 +158,17 @@ void ElementMatrixMultiplication(struct data *Data){
         pthread_join(Threads[i], NULL);
     }
 }
-int main() {
+int main(int argc, char *argv[]) {
     struct timeval stop, start;
     struct data *Data = malloc(sizeof(struct data));
-    struct matrix a;
-    struct matrix b;
-    struct matrix c;
-
-    if (ReadFile("a", &a) || ReadFile("b", &b)) {
-        printf("Didn't read files");
+    struct matrix a,b,c;
+    char *A="a",*B="b",*C="c";
+    if (argc == 4){
+        A = argv[1];
+        B = argv[2];
+        C = argv[3];
+    }
+    if (ReadFile(A, &a) || ReadFile(B, &b)) {
         return 0;
     }
 
@@ -175,21 +178,23 @@ int main() {
     Data->c = &c;
 
     if (a.col != b.row) {
-        printf("Sizes aren't suitable");
+        printf("Sizes aren't suitable\n");
         return 0;
     }
-    char *name;
+
+    char name[100];
+    strcpy(name,C);
     for (int i = 0; i < 3; ++i) {
         gettimeofday(&start, NULL);
         if(i==0){
             MatrixMultiplication(Data);
-            name = "c0";
+            strcat(name,"0");
         }else if(i==1){
             RowMatrixMultiplication(Data);
-            name = "c1";
+            strcat(name,"1");
         }else{
             ElementMatrixMultiplication(Data);
-            name = "c2";
+            strcat(name,"2");
         }
         gettimeofday(&stop, NULL);
         printf("%d.Seconds taken %lu\n", i,stop.tv_sec - start.tv_sec);
