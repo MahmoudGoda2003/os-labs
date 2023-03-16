@@ -158,6 +158,14 @@ void ElementMatrixMultiplication(struct data *Data){
         pthread_join(Threads[i], NULL);
     }
 }
+
+void Free(struct matrix *Data){
+    for (int i = 0; i < Data->row; ++i) {
+        free(Data->data[i]);
+    }
+    free(Data->data);
+}
+
 int main(int argc, char *argv[]) {
     struct timeval stop, start;
     struct data *Data = malloc(sizeof(struct data));
@@ -169,6 +177,7 @@ int main(int argc, char *argv[]) {
         C = argv[3];
     }
     if (ReadFile(A, &a) || ReadFile(B, &b)) {
+        free(Data);
         return 0;
     }
 
@@ -179,6 +188,10 @@ int main(int argc, char *argv[]) {
 
     if (a.col != b.row) {
         printf("Sizes aren't suitable\n");
+        Free(Data->c);
+        Free(Data->a);
+        Free(Data->b);
+        free(Data);
         return 0;
     }
 
@@ -201,7 +214,9 @@ int main(int argc, char *argv[]) {
         printf("%d.Microseconds taken: %lu\n", i,stop.tv_usec - start.tv_usec);
         WriteFile(name, Data->c);
     }
-    free(Data->c->data);
+    Free(Data->c);
+    Free(Data->a);
+    Free(Data->b);
     free(Data);
     return 0;
 }
